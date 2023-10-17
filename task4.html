@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: aqua;
+        color: white;
+      }
+      #one {
+        display: block;
+        text-align: center;
+        margin-top: 50px;
+      }
+      h1 {
+        font-size: 50px;
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        padding: 0%;
+      }
+      #one {
+        font-size: 30px;
+        display: block;
+        padding-top: 100px;
+        padding-bottom: 20px;
+      }
+      input {
+        width: 250px;
+        height: 30px;
+        background-color: white;
+        border-radius: 30px;
+      }
+      #btn {
+        width: 100px;
+        cursor: pointer;
+        height: 30px;
+        border-radius: 10px;
+        background-color: black;
+        color: white;
+      }
+      span {
+        font-size: 25px;
+        color: aqua;
+      }
+      #details {
+        background-color: black;
+        color: white;
+        font-family: sans-serif;
+      }
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 30px;
+      }
+      #info {
+        padding: 30px;
+      }
+      #one h1{
+        color:black ;
+      }
+      h1 span{
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+      <div id="one">
+        <h1>Movie <span>Web</span></h1>
+        <form id="form">
+          <label for="data">Enter a Movie Name :</label>
+          <input id="data" placeholder="Movie Name" />
+          <button type="submit" id="btn">Search</button>
+        </form>
+      </div>
+      <div id="details"></div>
+  </body>
+  <script>
+    document.getElementById("form").addEventListener("submit", async (x) => {
+      x.preventDefault();
+      var data = document.getElementById("data").value;
+      try {
+        const response = await fetch(
+          `https://www.omdbapi.com/?t=${data}&apikey=562f3089`
+        );
+        const s = await response.json();
+        myFun(s);
+      } catch{
+        console.log("error");
+        var body = document.getElementsByTagName("body")[0];
+        body.style.backgroundColor = "white";
+        body.style.color ="black"
+        body.innerHTML = "<h1>404 ERROR</h1>";
+      }
+    });
+
+    function myFun(s) {
+      var details = document.getElementById("details");
+      if (s.Response === "True") {
+        const {
+          Title,
+          Year,
+          Director,
+          Plot,
+          Poster,
+          Actors,
+          Language,
+          Runtime,
+          Released,
+          Awards,
+          imdbRating,
+        } = s;
+        details.innerHTML = `
+                   <img src = "${Poster}" alt = "${Title} Image">
+                   <h1>${Title} (${Year})</h1>
+                   <div id = "info">
+                   <h4><span>Director :</span> ${Director}</h4>
+                   <h4><span>Actors :</span> ${Actors}</h4>
+                   <h4><span>Language :</span> ${Language}</h4>
+                   <h4><span>Released :</span> ${Released}</h4>
+                   <h4><span>Runtime :</span> ${Runtime}</h4>
+                   <h4><span>Awards :</span> ${Awards}</h4>
+                   <h4><span>IMDB Rating :</span> ${imdbRating}</h4>
+                   <h4><span>Plot:</span> ${Plot}</h4>
+                   </div>`;
+      } else {
+        details.innerHTML = "<h3>Movie Not Found</h3>";
+      }
+    }
+  </script>
+</html>
